@@ -62,6 +62,7 @@ hf download EthanYan12581/RobustStress \
 | CDMS | GPT-J-6B | 23,170 | 2,800 | 2,884 | 2,868 | 2,848 |       2,809 | 2,786 |
 | CDCM | All | 319,071 | 56,792 | 56,819 | 56,564 | 55,972 |      55,313 | 54,543 |
 | **Total** | | **649,428** | **105,261** | **105,418** | **104,907** | **103,965** | **102,735** | **101,459** |
+
 ❗Caption: SR-$r$ denotes synonym replacement with replacement ratio $r$. 
 DSMS, CDMS, DSCM, and CDCM denote domain-specific-model-specific, 
 cross-domains-model-specific, domain-specific-cross-models, and cross-domains-cross-models, respectively.
@@ -82,6 +83,7 @@ cross-domains-model-specific, domain-specific-cross-models, and cross-domains-cr
 | CDMS | GPT-J-6B | 1,257 | 1,683 | 2,114 | 673 | 907 | 1,158 | 2,710 | 2,431 | 2,580 |
 | CDCM | All | 2,444 | 3,242 | 4,040 | 1,366 | 1,879 | 2,482 | 5,231 | 4,768 | 4,991 |
 | **Total** | | **26,480** | **34,492** | **42,038** | **17,290** | **21,540** | **26,568** | **50,523** | **47,705** | **49,439** |
+
 ❗Caption: Low, Medium, and High denote graded paraphrasing intensities after semantic consistency filtering.
 
 ## ⚙️ Data and Experimental Reproduction
