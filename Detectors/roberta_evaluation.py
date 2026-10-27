@@ -77,7 +77,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_data_path', type=str, required=True,
                         help="Path to the test data. could be several files with ','. "
                              "Note that the data should have been perturbed.")
-    parser.add_argument('--model_name', default="/data5/storage4/wudauser05/yyc/roberta-base", type=str, required=False)
+    parser.add_argument('--model_name', default="roberta-base", type=str, required=False)
     parser.add_argument('--DEVICE', default="cuda", type=str, required=False)
     parser.add_argument('--seed', default=2026, type=int, required=False)
     args = parser.parse_args()

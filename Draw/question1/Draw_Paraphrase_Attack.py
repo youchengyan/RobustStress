@@ -5,14 +5,13 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-# --- 1. 准备数据 ---
+# --- 1. prepare data ---
 detectors = [
     "Fast-DetectGPT", "Binoculars", "RoBERTa", "CoCo",
     "RoBERTa-MPU", "BISCOPE", "Lastde", "SCRN", "PRDetect"
 ]
 
-# ✅ 替换为你的 Paraphrase Attack 数据（每个模型 4 个值）
-# 格式: [Clean, Low, Medium, High]
+# format: [Clean, Low, Medium, High]
 y_paraphrase_data = [
     [0.7214, 0.7224, 0.7176, 0.7146],
     [0.6851, 0.6851, 0.6816, 0.6820],
@@ -135,23 +134,22 @@ paraphrase_Domain-Specific-Cross-Models_F1
 """
 
 
-# --- 2. 构建 DataFrame ---
+# --- 2. construct DataFrame ---
 x_labels = ['Clean', 'Low', 'Medium', 'High']
 
 paraphrase_df = pd.DataFrame({
     'Attack_Level': np.tile(x_labels, len(detectors)),  # 4 labels × 9 detectors
     'AUROC': np.concatenate(y_paraphrase_data),
-    'Detector': np.repeat(detectors, len(x_labels))   # 每个 detector 重复 4 次
+    'Detector': np.repeat(detectors, len(x_labels))
 })
 
-# ✅ 确保 x 轴按指定顺序排列（避免 seaborn 自动排序）
 paraphrase_df['Attack_Level'] = pd.Categorical(
     paraphrase_df['Attack_Level'],
     categories=x_labels,
     ordered=True
 )
 
-# --- 3. 绘图 ---
+# --- 3. draw picture ---
 sns.set_theme(style="whitegrid")
 plt.rcParams.update({'font.size': 12})
 
@@ -167,10 +165,8 @@ ax1 = sns.lineplot(
 
 ax1.set_xlabel('Paraphrase Attack Level')
 ax1.set_ylabel('AUROC')
-# ax1.set_title('(b) Paraphrase Attack')
 ax1.set_ylim(0.0, 1.0)
 
-# 图例放在下方
 ax1.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.25))
 
 plt.tight_layout()

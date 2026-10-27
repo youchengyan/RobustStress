@@ -23,7 +23,7 @@ with open(os.path.join(args.input_dir, "test.json"), "r", encoding="utf-8") as f
 
 L = [5, 10, 15, 20]
 
-# 创建输出目录
+# output dir
 output_dir = os.path.join(args.input_dir, "SynonymReplacement")
 os.makedirs(output_dir, exist_ok=True)
 
@@ -33,23 +33,22 @@ for p in L:
     for i in tqdm(range(len(texts)), desc=f"p={p}%"):
         doc = nlp(texts[i])
 
-        # 第一步：收集所有 ADJ/NOUN 的 token 及其索引
+        # The first step
         candidate_indices = []
         tokens = []
         for idx, token in enumerate(doc):
             tokens.append(token.text)
-            if token.pos_ == "ADJ" or token.pos_ == "NOUN":
+            if token.pos_ == "ADJ" or token.pos_ == "ADV":
                 candidate_indices.append(idx)
 
-        # 第二步：从候选中按比例采样要标记的数量
+        # The second step
         if candidate_indices:
-            num_to_mark = max(1, round(len(candidate_indices) * p / 100))  # 至少标记1个（可选）
-            num_to_mark = min(num_to_mark, len(candidate_indices))  # 不超过总数
+            num_to_mark = max(1, round(len(candidate_indices) * p / 100))
+            num_to_mark = min(num_to_mark, len(candidate_indices))
             marked_indices = set(random.sample(candidate_indices, num_to_mark))
         else:
             marked_indices = set()
 
-        # 构建新文本：只对标记的索引加 [[...]]
         new_tokens = [
             f"[[{tokens[idx]}]]" if idx in marked_indices else tokens[idx]
             for idx in range(len(tokens))
@@ -57,6 +56,6 @@ for p in L:
         new_text = " ".join(new_tokens)
         result.append({"text": new_text, "label": labels[i]})
 
-    # 保存结果
+    # save results
     with open(os.path.join(output_dir, f"test_perturb_{p}.json"), "w", encoding="utf-8") as w:
         json.dump(result, w, ensure_ascii=False, indent=2)

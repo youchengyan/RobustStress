@@ -88,8 +88,8 @@ def entropy(p_logits: torch.Tensor,
 
 class Binoculars(object):
     def __init__(self,
-                 observer_name_or_path: str = "/data5/storage4/wudauser05/yyc/camr-master/falcon-7b",
-                 performer_name_or_path: str = "/data5/storage4/wudauser05/yyc/falcon-7b-instruct",
+                 observer_name_or_path: str = "falcon-7b",
+                 performer_name_or_path: str = "falcon-7b-instruct",
                  use_bfloat16: bool = True,
                  max_token_observed: int = 512,
                  mode: str = "low-fpr",

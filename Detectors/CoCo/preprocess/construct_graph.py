@@ -117,7 +117,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-#  python preprocess/construct_graph.py --kw_file_dir /data/Coh-MGT-Detection-main/data/MAGE/specific/polish/qwen/uniPrompt/test_kws.jsonl
+#  python preprocess/construct_graph.py --kw_file_dir test_kws.jsonl
 
 if __name__ == "__main__":
     if args.output_dir == "":
@@ -153,5 +153,4 @@ if __name__ == "__main__":
             outf.write(json.dumps(line) + "\n")
     end_time = datetime.now()
     elapsed = end_time - start_time
-    print(f"程序执行时间: {elapsed.total_seconds():.2f} 秒")
     print("{} instances are too short that have no graph".format(no_node))

@@ -6,12 +6,8 @@ import re
 import argparse
 from datetime import datetime
 
-# predictor_ner = Predictor.from_path(
-#     "F:\small_model_language\\ner-elmo.2021-02-12.tar.gz",
-#     cuda_device=0,
-# )
 predictor_ner = Predictor.from_path(
-    r"F:\small_model_language\ner-elmo.2021-02-12.tar.gz",
+    r"ner-elmo.2021-02-12.tar.gz",
     cuda_device=0,
 )
 
@@ -100,22 +96,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-#  python preprocess/extract_keywords.py --raw_dir /data/Coh-MGT-Detection-main/data/MAGE/specific/polish/qwen/uniPrompt/test.jsonl
-
-
+#  python preprocess/extract_keywords.py --raw_dir test.jsonl
 if __name__ == "__main__":
-    # start_time = datetime.now()
-    # if args.output_dir == "":
-    #     args.output_dir = args.raw_dir.replace(".jsonl", "_kws.jsonl")
-    # file = list(load_jsonl(args.raw_dir))
-    # with open(args.output_dir, "w") as out_file:
-    #     for line in tqdm(file):
-    #         doc = line["article"]
-    #         line["information"] = {"keywords": analyze_document(doc)}
-    #         out_file.write(json.dumps(line) + "\n")
-    # end_time = datetime.now()
-    # elapsed = end_time - start_time
-    # print(f"程序执行时间: {elapsed.total_seconds():.2f} 秒")
 
     start_time = datetime.now()
     if args.output_dir == "":
@@ -123,7 +105,6 @@ if __name__ == "__main__":
     with open(args.raw_dir, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # file = list(load_jsonl(args.raw_dir))
     with open(args.output_dir, "w") as out_file:
         for line in tqdm(data):
             doc = line["text"]
@@ -131,4 +112,3 @@ if __name__ == "__main__":
             out_file.write(json.dumps(line) + "\n")
     end_time = datetime.now()
     elapsed = end_time - start_time
-    print(f"程序执行时间: {elapsed.total_seconds():.2f} 秒")

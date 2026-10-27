@@ -1,10 +1,6 @@
 from utils.utils import set_logger, path_checker, metrics_fn, compute_metrics
 
 import torch
-import numpy as np
-import random
-import pickle
-import datetime
 import json
 
 from transformers import (AutoConfig, AutoModelForSequenceClassification, Trainer, HfArgumentParser, set_seed,
@@ -44,10 +40,7 @@ def metrics_fn(outputs):
     return compute_metrics(y_true, y_pred, y_score)
 
 
-# python main.py --do_predict True --save_total_limit 5 --learning_rate 1e-4 --per_device_train_batch_size 16 --per_device_eval_batch_size 16 --num_train_epochs 2.0 --logging_steps 50 --gradient_accumulation_steps 1 --data_files /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum  --output_dir ./data_out/scrn --test_files /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/test.json
-
-
-# python main.py --do_predict True --save_total_limit 5 --learning_rate 1e-4 --per_device_train_batch_size 16 --per_device_eval_batch_size 16 --num_train_epochs 2.0 --logging_steps 50 --gradient_accumulation_steps 1 --data_files /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum  --output_dir ./data_out/scrn --test_files /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/SynonymReplacement/filter/test_perturb_5.json
+# python main.py --do_predict True --save_total_limit 5 --learning_rate 1e-4 --per_device_train_batch_size 16 --per_device_eval_batch_size 16 --num_train_epochs 2.0 --logging_steps 50 --gradient_accumulation_steps 1 --data_files RobustStressBench/domain_specific_model_specific/xsum  --output_dir ./data_out/scrn --test_files RobustStressBench/domain_specific_model_specific/xsum/test.json
 
 def main():
     # Get arguments

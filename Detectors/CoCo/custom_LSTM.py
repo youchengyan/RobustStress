@@ -37,10 +37,8 @@ class CustomRNN(nn.Module):
     def forward(self, inputs, seq_lengths, sen_mask, method="LSTM"):
         # input.size = (batch_size, max_seq_length, node_num)
         # method can be "Pool", "LSTM", or 'AttLSTM"
-        # === 强制对齐 inputs 和 sen_mask 的长度 ===
         B, L_in, H = inputs.shape
 
-        # === 1. 强制 sen_mask 与 inputs 长度一致 ===
         if sen_mask.size(1) != L_in:
             if sen_mask.size(1) > L_in:
                 sen_mask = sen_mask[:, :L_in]
@@ -52,12 +50,10 @@ class CustomRNN(nn.Module):
             key_padding_mask = (sen_mask == 0)  # [B, L_in]
             output = self.rnn(inputs, src_key_padding_mask=key_padding_mask)  # [B, L_in, H]
 
-            # === 3. 用原始 output + 对齐后的 sen_mask 计算 final_rep ===
             masked_output = output * sen_mask.unsqueeze(-1).float()  # [B, L_in, H]
             lengths = sen_mask.sum(dim=1, keepdim=True).clamp(min=1)  # [B, 1]
             final_rep = masked_output.sum(dim=1) / lengths  # [B, H]
 
-            # === 4. 单独构造 padded_output（不影响 final_rep）===
             if L_in < self.max_seq_length:
                 pad = torch.zeros(B, self.max_seq_length - L_in, H, device=output.device)
                 padded_output = torch.cat([output, pad], dim=1)  # [B, max_seq_length, H]

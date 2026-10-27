@@ -5,27 +5,23 @@ from openai import OpenAI
 import argparse
 
 
-# 连接到 Ollama 的 OpenAI 兼容 API（默认端口 11434）
 def call(prompt):
     try:
         client = OpenAI(
             base_url="http://localhost:11434/v1",
-            api_key="ollama"  # Ollama 接受任意非空 key
+            api_key="ollama"
         )
 
-        # 调用时使用 exact model name from `ollama list`
         response = client.chat.completions.create(
-            model="llama3:8b",  # ← 关键：去掉 -q4
+            model="llama3:8b",
             messages=[
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.7,
-            max_tokens=1000
+            temperature=0.7
         )
         return response.choices[0].message.content
     except Exception as e:
-        print(f"错误信息：{e}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        print(f"error information：{e}")
 
 
 def load_existing_output(output_path):
@@ -36,21 +32,19 @@ def load_existing_output(output_path):
                 if isinstance(data, list):
                     return data
         except Exception as e:
-            print(f"警告：输出文件格式错误，将重新开始。错误: {e}")
+            print(f"warning：file format error. Error: {e}")
     return []
 
 
 def process_json_array(input_path, output_path, save_every=5):
-    # 加载已处理的结果
     output_data = load_existing_output(output_path)
     start_index = len(output_data)
 
-    # 读取输入
     with open(input_path, 'r', encoding='utf-8') as f:
         input_data = json.load(f)
 
     total = len(input_data)
-    print(f"总共 {total} 条数据，已处理 {start_index} 条，从第 {start_index + 1} 条开始...")
+    print(f" {total} itmes, process {start_index} item, from {start_index + 1} start...")
 
     for i in range(start_index, total):
         item = input_data[i]
@@ -71,36 +65,28 @@ def process_json_array(input_path, output_path, save_every=5):
             new_item = {"text": refined_text, "label": label}
             output_data.append(new_item)
 
-            print(f"✅ 已处理第 {i + 1}/{total} 条")
 
         except Exception as e:
-            print(f"❌ 第 {i + 1} 条出错: {e}")
-            # 保留原文或标记错误
             output_data.append({"text": "[ERROR]", "label": label})
 
-        # 每 save_every 条保存一次完整文件
         if (i + 1) % save_every == 0 or i == total - 1:
             with open(output_path, 'w', encoding='utf-8') as f_out:
                 json.dump(output_data, f_out, ensure_ascii=False, indent=2)
-            print(f"💾 已保存至 {output_path}（共 {len(output_data)} 条）")
+            print(f"💾 save {output_path} (total {len(output_data)} item)")
 
-    print("🎉 全部处理完成！")
+    print("🎉 all done!")
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="使用 Ollama 模型对 JSON 数据进行 paraphrase")
-    parser.add_argument("--input", required=True, help="输入 JSON 文件路径")
-    parser.add_argument("--output", required=True, help="输出 JSON 文件路径")
-    parser.add_argument("--model", default="qwen2.5:7b-instruct", help="Ollama 模型名称")
-    parser.add_argument("--save_every", type=int, default=5, help="每处理 N 条保存一次")
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--model")
+    parser.add_argument("--save_every", type=int, default=5)
     args = parser.parse_args()
 
     output_dir = os.path.dirname(args.output)
-    if output_dir:  # 防止 args.output 是当前目录下的文件（如 "test.json"）
+    if output_dir:
         os.makedirs(output_dir, exist_ok=True)
 
     process_json_array(input_path=args.input, output_path=args.output, save_every=args.save_every)
-
-    # # 使用
-    # process_json_array('/data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/test.json',
-    #                    './specific_xsum_test.json', save_every=5)

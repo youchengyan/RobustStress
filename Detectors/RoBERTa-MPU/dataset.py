@@ -96,27 +96,13 @@ def load_texts_original(data_file):
 
 
 def load_texts_tweep(data_file):
-    chatgpt_texts = []
-    human_texts = []
-    # D = pd.read_csv(data_file, sep=";")
-    #
-    # for idx in tqdm(range(len(D)), desc=f'Loading {data_file}'):
-    #     if D.iloc[idx]['account.type'] == 'human':
-    #         human_texts.append(D.iloc[idx]['text'])
-    #     elif D.iloc[idx]['account.type'] == 'bot':
-    #         chatgpt_texts.append(D.iloc[idx]['text'])
-    #     else:
-    #         print(D.iloc[idx]['account.type'])
 
-    # 初始化列表
     human_texts = []
     chatgpt_texts = []
 
-    # 读取 JSON 文件
     with open(data_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # 遍历每一条记录
     for item in tqdm(data, desc=f'Loading {data_file}'):
         text = item.get('text', '')
         label = item.get('label')

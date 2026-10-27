@@ -234,10 +234,6 @@ def train(args, train_dataset, model, tokenizer):
             outputs, _ = model(**inputs)
 
             loss = outputs[0]
-            # print(f'loss:{loss}')
-            # wandb.log({"train/loss": loss})
-            # if step in [0,1]:
-            #     continue
 
             if args.n_gpu > 1:
                 loss = loss.mean()
@@ -443,13 +439,8 @@ def load_and_cache_examples(
     output_dir.mkdir(parents=True, exist_ok=True)
     cached_features_file = os.path.join(
         args.output_dir,
-        # "data",
         "cached_{}_{}".format(
             mode,
-            # list(filter(None, args.model_name_or_path.split("/"))).pop(),
-            # str(args.max_seq_length),
-            # str(task),
-            # str(dataset_name),
             str(rel),
         ),
     )
@@ -577,7 +568,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--model_name_or_path",
-    default=r"/data5/storage4/wudauser05/yyc/roberta-base",
+    default=r"roberta-base",
     type=str,
     help="Base model for CoCo with size",
 )
@@ -1009,14 +1000,10 @@ def run(conf, data_dir=None):
 
 
 def main():
-    data_dir = os.path.abspath("/data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum")
+    data_dir = os.path.abspath("RobustStressBench/domain_specific_model_specific/xsum")
 
     run({"seed": 2026}, data_dir)
 
-# execute code
-# export OMP_NUM_THREAD=1
-# export OPENBLAS_NUM_THREADS=1
-# export RAYON_NUM_THREADS=1
 # python run_detector.py --output_dir ./output --train_file train_graph.jsonl --dev_file dev_graph.jsonl --test_file test_graph.jsonl
 
 if __name__ == "__main__":

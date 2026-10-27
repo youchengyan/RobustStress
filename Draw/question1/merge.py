@@ -5,7 +5,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-# --- 1. 检测器名称 ---
+# --- 1. Detector name ---
 detectors = [
     "Fast-DetectGPT", "Binoculars", "RoBERTa", "CoCo",
     "RoBERTa-MPU", "BISCOPE", "Lastde", "SCRN", "PRDetect"
@@ -15,7 +15,7 @@ sns.set_theme(style="whitegrid")
 plt.rcParams.update({'font.size': 9})
 
 # ==============================
-# 第一部分：Synonym Replacement 数据 (5 points: 0,5,10,15,20)
+# The first part：Synonym Replacement data (5 points: 0,5,10,15,20)
 # ==============================
 x_synonym = [0, 5, 10, 15, 20]
 
@@ -44,7 +44,7 @@ synonym_f1 = [
 ]
 
 # ==============================
-# 第二部分：Paraphrase Attack 数据 (4 levels: Clean, Low, Medium, High)
+# The second part：Paraphrase Attack data (4 levels: Clean, Low, Medium, High)
 # ==============================
 paraphrase_labels = ['Clean', 'Low', 'Medium', 'High']
 
@@ -118,7 +118,7 @@ paraphrase_data = {
 }
 
 # ==============================
-# 辅助函数：创建 DataFrame
+# construct DataFrame
 # ==============================
 def create_synonym_df(data, metric):
     return pd.DataFrame({
@@ -135,14 +135,13 @@ def create_paraphrase_df(data, metric):
     })
 
 # ==============================
-# 构建所有 DataFrame
+# construct all DataFrame
 # ==============================
 df_syn_auroc = create_synonym_df(synonym_auroc, 'AUROC')
-df_syn_f1    = create_synonym_df(synonym_f1, 'F1')
+df_syn_f1 = create_synonym_df(synonym_f1, 'F1')
 
-# 设置分类顺序
 df_syn_auroc['Replacement_Ratio'] = pd.Categorical(df_syn_auroc['Replacement_Ratio'], categories=x_synonym, ordered=True)
-df_syn_f1['Replacement_Ratio']    = pd.Categorical(df_syn_f1['Replacement_Ratio'], categories=x_synonym, ordered=True)
+df_syn_f1['Replacement_Ratio'] = pd.Categorical(df_syn_f1['Replacement_Ratio'], categories=x_synonym, ordered=True)
 
 paraphrase_dfs = {}
 for key, data in paraphrase_data.items():
@@ -152,18 +151,18 @@ for key, data in paraphrase_data.items():
     paraphrase_dfs[key] = df
 
 # ==============================
-# 绘图：2 行 × 4 列
+# draw picture
 # ==============================
 fig, axes = plt.subplots(2, 4, figsize=(20, 10))
 
-for ax in axes.flat:  # axes.flat 将 2x4 数组展平为一维，方便遍历
+for ax in axes.flat:
     for spine in ax.spines.values():
         spine.set_color('black')
-        spine.set_linewidth(0.8)  # 可选：加粗边框（默认太细）
+        spine.set_linewidth(0.8)
 
 axes = axes.flatten()
 
-# 第1行：Synonym AUROC, Synonym F1, Qwen2.5-7B AUROC, Qwen2.5-7B F1
+# The first line：Synonym AUROC, Synonym F1, Qwen2.5-7B AUROC, Qwen2.5-7B F1
 plot_configs = [
     (df_syn_auroc, 'Replacement_Ratio', 'AUROC', '(a) Synonym Replacement (AUROC)', x_synonym),
     (df_syn_f1,    'Replacement_Ratio', 'F1',    '(b) Synonym Replacement (F1)',    x_synonym),
@@ -196,26 +195,18 @@ for idx, (df, x_col, y_col, title, x_ticks) in enumerate(plot_configs):
     else:
         ax.set_ylim(0.05, 1.0)
 
-# ==============================
-# 添加统一图例
-# ==============================
-# handles, labels = axes[0].get_legend_handles_labels()
-# fig.legend(handles, labels, loc='lower center', ncol=5, bbox_to_anchor=(0.5, -0.03))
-
 from matplotlib.lines import Line2D
 
-# 使用 tab10 前9种颜色
 colors = plt.cm.tab10.colors[:9]
 handles = [
     Line2D(
-        [0], [0],                     # 虚拟数据点
-        color=c,                      # 线条颜色
-        marker='o',                   # 圆形标记
-        markersize=5,                 # 点大小
-        markerfacecolor=c,            # 实心填充色 = 线色
-        # markeredgecolor='black',      # 可选：加黑边更清晰
+        [0], [0],
+        color=c,
+        marker='o',
+        markersize=5,
+        markerfacecolor=c,
         markeredgewidth=0.5,
-        linewidth=1.5,                # 线宽
+        linewidth=1.5,
         label=det
     )
     for c, det in zip(colors, detectors)
@@ -225,9 +216,9 @@ labels = detectors
 fig.legend(
     handles, labels,
     loc='lower center',
-    ncol=9,                      # 一行9个（或改为 ncol=5 分两行）
-    bbox_to_anchor=(0.5, 0.045), # 位置更低
-    frameon=True,               # 无边框 → 匹配你的截图
+    ncol=9,
+    bbox_to_anchor=(0.5, 0.045),
+    frameon=True,
     fancybox=False,
     shadow=False,
     fontsize=9,
@@ -236,10 +227,9 @@ fig.legend(
 )
 
 # ==============================
-# 调整布局并保存
+# save picture
 # ==============================
 plt.tight_layout(rect=[0, 0.08, 1, 1])
 plt.savefig('combined_8_subplots.png', dpi=300, bbox_inches='tight')
-print("✅ 8 张子图已保存为 combined_8_subplots.png")
 
 plt.show()

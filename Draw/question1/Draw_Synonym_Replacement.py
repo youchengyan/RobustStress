@@ -5,13 +5,12 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-# --- 1. 准备数据 ---
+# --- 1. prepare data ---
 detectors = [
     "Fast-DetectGPT", "Binoculars", "RoBERTa", "CoCo",
     "RoBERTa-MPU", "BISCOPE", "Lastde", "SCRN", "PRDetect"
 ]
 
-# 模拟数据 (请替换为你的真实数据)
 y_lexical_data = [
     [0.6465, 0.6429, 0.6581, 0.6531, 0.6450],  # Fast-DetectGPT
     [0.6662, 0.6670, 0.6680, 0.6683, 0.6663],  # Binoculars
@@ -126,16 +125,16 @@ Cross-Domains-Cross-Models_F1
 ]
 """
 
-# --- 2. 将数据转换为 Pandas DataFrame (这是使用 Seaborn 的关键!) ---
+# --- 2. transfer to Pandas DataFrame ---
 
-# --- 2. 构建 DataFrame ---
+# --- 2. construct DataFrame ---
 lexical_df = pd.DataFrame({
-    'Replacement_Ratio': np.tile([0, 5, 10, 15, 20], 9),  # ✅ 包含 0%
+    'Replacement_Ratio': np.tile([0, 5, 10, 15, 20], 9),
     'AUROC': np.concatenate(y_lexical_data),
-    'Detector': np.repeat(detectors, 5)  # ✅ 每个重复 5 次
+    'Detector': np.repeat(detectors, 5)
 })
 
-# --- 3. 绘图 ---
+# --- 3. draw picture ---
 sns.set_theme(style="whitegrid")
 plt.rcParams.update({'font.size': 12})
 
@@ -153,7 +152,7 @@ ax1.set_xlabel('Replacement Ratio (%)')
 ax1.set_ylabel('AUROC')
 # ax1.set_title('(a) Synonym Replacement (WordNet)')
 ax1.set_ylim(0.2, 1.0)
-ax1.set_xticks([0, 5, 10, 15, 20])  # ✅ 显式设置 x 轴刻度
+ax1.set_xticks([0, 5, 10, 15, 20])
 ax1.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.25))
 
 plt.tight_layout()

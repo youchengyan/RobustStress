@@ -10,7 +10,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Minimal model zoo mapping model keys to pretrained model names.
 MODEL_ZOO = {
-    'llama2-7b': '/data5/storage4/wudauser05/yyc/meta-llama-2-7b',
+    'llama2-7b': 'meta-llama-2-7b',
     'llama2-13b': 'meta-llama/Llama-2-13b-chat-hf',
     'llama3-8b': 'meta-llama/Meta-Llama-3-8B-Instruct',
     'gemma-2b': 'google/gemma-1.1-2b-it',
@@ -191,11 +191,6 @@ def data_generation(args, out_dir, dataset_file):
         elif label == 1:
             gpt_data.append(text)
 
-        # human_data = human_data[:100]
-        # gpt_data = gpt_data[:100]
-        # Load GPT-generated data.
-        # with open(f'{base_dir}/{task}/{task}_{generative_model}.json', 'r') as f:
-        #     gpt_data = json.load(f)
     # Define the human features file path internally.
     human_feat_path = os.path.join(out_dir, f"human_features.pkl")
 

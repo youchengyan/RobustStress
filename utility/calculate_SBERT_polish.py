@@ -28,7 +28,7 @@ def main():
 
     # Load SBERT model
     print("Loading SBERT model...")
-    model = SentenceTransformer('/data5/storage4/wudauser05/yyc/all-MiniLM-L6-v2')
+    model = SentenceTransformer('all-MiniLM-L6-v2')
 
     # Encode original sentences once
     print("Encoding original sentences...")

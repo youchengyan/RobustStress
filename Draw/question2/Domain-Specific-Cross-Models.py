@@ -1,13 +1,10 @@
 import matplotlib
-# 必须在导入 pyplot 之前设置后端
-# TkAgg 是最通用的交互式后端
 matplotlib.use('TkAgg')
 
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# 示例数据结构
 data = {
     '5% SR': [7.14, 4.38, 0.32, -0.22],
     '10% SR': [9.88, 8.69, -0.24, 1.85],

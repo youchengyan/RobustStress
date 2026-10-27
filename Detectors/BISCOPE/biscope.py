@@ -78,18 +78,15 @@ def main():
     recall = recall_score(test_labels, preds)
     f1 = f1_score(test_labels, preds)
     acc = accuracy_score(test_labels, preds)
-    auroc = roc_auc_score(test_labels, pred_probs)  # 注意：这里用概率，不是 preds
+    auroc = roc_auc_score(test_labels, pred_probs)
     print(f"Precision: {precision:.4f}")
     print(f"Recall:    {recall:.4f}")
     print(f"F1:        {f1:.4f}")
     print(f"Acc:       {acc:.4f}")
     print(f"AUROC:     {auroc:.4f}")
 
-    # 保存结果
+    # save results
     result = {
-        # 'test_labels': test_labels,
-        # 'preds': preds,
-        # 'pred_probs': pred_probs,
         'precision': precision,
         'recall': recall,
         'f1': f1,
@@ -106,6 +103,6 @@ def main():
         f.write(str(result))
 
 
-# python biscope.py --detect_model llama2-7b --train_dataset /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/train.json --test_dataset /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/SynonymReplacement/filter/test_perturb_10.json --base_out_dir ./test_perturb_10
+# python biscope.py --detect_model llama2-7b --train_dataset train.json --test_dataset test_perturb_10.json --base_out_dir ./test_perturb_10
 if __name__ == '__main__':
     main()

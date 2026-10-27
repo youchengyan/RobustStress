@@ -53,7 +53,7 @@ def experiment(args):
     reference_tokenizer = AutoTokenizer.from_pretrained(args.reference_model)
     reference_model = AutoModelForCausalLM.from_pretrained(
         args.reference_model,
-        torch_dtype=torch.float16,  # 强烈建议用 FP16 节省显存
+        torch_dtype=torch.float16,
         low_cpu_mem_usage=True
     )
     reference_model.eval()
@@ -128,8 +128,8 @@ if __name__ == '__main__':
     parser.add_argument('--test_data_path', type=str, required=True,
                         help="Path to the test data. could be several files with ','. "
                              "Note that the data should have been perturbed.")
-    parser.add_argument('--reference_model', type=str, default="/data5/storage4/wudauser05/yyc/gptneo")
-    parser.add_argument('--scoring_model', type=str, default="/data5/storage4/wudauser05/yyc/GPT-J")
+    parser.add_argument('--reference_model', type=str, default="gptneo")
+    parser.add_argument('--scoring_model', type=str, default="GPT-J")
     parser.add_argument('--DEVICE', default="cuda", type=str, required=False)
     parser.add_argument('--seed', default=2023, type=int, required=False)
     args = parser.parse_args()

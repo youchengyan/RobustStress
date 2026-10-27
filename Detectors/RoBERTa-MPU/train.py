@@ -187,7 +187,7 @@ def validate(model: nn.Module, device: str, loader: DataLoader, votes=1, desc='V
 
             loop.set_postfix(loss=loss.item(), acc=validation_accuracy / validation_epoch_size)
 
-    # ===== 合并所有 logits 和 labels =====
+    # ===== merge all logits and labels =====
     all_logits = torch.cat(all_logits, dim=0).float()  # [N]
     all_labels = torch.cat(all_labels, dim=0).long()  # [N]
 
@@ -198,19 +198,15 @@ def validate(model: nn.Module, device: str, loader: DataLoader, votes=1, desc='V
 
     print(f'auroc:{auroc}')
 
-    # 获取基础文件名（不含扩展名）
     basename = os.path.basename(args.val_file1)  # e.g., "test.json"
     file_name_without_ext = os.path.splitext(basename)[0]
 
-    # 构造输出目录和日志文件路径
     output_dir = args.output_dir
     os.makedirs(output_dir, exist_ok=True)
     log_path = os.path.join(output_dir, f"{file_name_without_ext}_MPU_auroc.txt")
 
-    # 构造日志行
     log_line = f'auroc: {auroc:.4f};'
 
-    # 写入（追加模式）
     with open(log_path, 'w', encoding='utf-8') as f:
         f.write(log_line)
 
@@ -265,19 +261,15 @@ def brief_validate(model, device, validation_loader, epoch, rank, val_name='', a
     if rank == 0:
         import os
 
-        # 获取基础文件名（不含扩展名）
         basename = os.path.basename(args.val_file1)  # e.g., "test.json"
         file_name_without_ext = os.path.splitext(basename)[0]
 
-        # 构造输出目录和日志文件路径
         output_dir = args.output_dir
         os.makedirs(output_dir, exist_ok=True)
         log_path = os.path.join(output_dir, f"{file_name_without_ext}_MPU_metrics.txt")
 
-        # 构造日志行
         log_line = f'Val {val_name} Epoch {epoch}== Accuracy: {accuracy:.4f}; Precision: {precision:.4f}; Recall: {recall:.4f}; F1Score: {f1:.4f}.\n'
 
-        # 写入（追加模式）
         with open(log_path, 'w', encoding='utf-8') as f:
             f.write(log_line)
 
@@ -396,7 +388,6 @@ def run(max_epochs=None,
             best_f1_epoch = epoch
 
         if rank == 0:
-            # print(f'222222222222222222222222')
             print(
                 f'Epoch {epoch}== Precision: {precision:.4f}; Recall: {recall:.4f}; F1Score: {f1:.4f}; Accuracy: {accuracy:.4f}; Best F1 {best_f1:.4f} @ep{best_f1_epoch}.')
 
@@ -449,7 +440,7 @@ def run(max_epochs=None,
             print('-' * 50)
 
 
-# CUDA_VISIBLE_DEVICES=2 python train.py --batch-size 32 --max-sequence-length 512 --train-data-file /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/train.json --val-data-file /data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum/test.json --lamb 0.4 --prior 0.2 --pu_type dual_softmax_dyn_dtrun --len_thres 55 --aug_min_length 1 --max-epochs 1 --weight-decay 0 --mode tweep --aug_mode sentence_deletion-0.25 --clean 1 --quick_val 1 --learning-rate 5e-05 --seed 2026
+# CUDA_VISIBLE_DEVICES=2 python train.py --batch-size 32 --max-sequence-length 512 --train-data-file RobustStressBench/domain_specific_model_specific/xsum/train.json --val-data-file RobustStressBench/domain_specific_model_specific/xsum/test.json --lamb 0.4 --prior 0.2 --pu_type dual_softmax_dyn_dtrun --len_thres 55 --aug_min_length 1 --max-epochs 1 --weight-decay 0 --mode tweep --aug_mode sentence_deletion-0.25 --clean 1 --quick_val 1 --learning-rate 5e-05 --seed 2026
 
 if __name__ == '__main__':
     from option import get_parser
@@ -492,8 +483,6 @@ if __name__ == '__main__':
         file_name_without_ext = os.path.splitext(basename)[0]
 
         args.log_dir = f'./results/{file_name_without_ext}'
-    # if args.epoch_size is None:
-    #     args.epoch_size = args.max_epochs
 
     print(f'ARGS: {args}')
 

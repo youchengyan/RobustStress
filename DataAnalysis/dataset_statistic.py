@@ -1,8 +1,8 @@
 import json
 import os
 
-# 定义需要统计的文件路径（相对或绝对）
-base_dir = "/data5/storage4/wudauser05/yyc/RobustStressBench/domain_specific_model_specific/xsum"
+# Path
+base_dir = ""
 
 file_paths = [
     os.path.join(base_dir, "train.json"),
@@ -30,13 +30,13 @@ def count_json_lines(filepath):
         print(f"❌ Error reading {filepath}: {e}")
         return 0
 
-print("📊 JSON 文件数据条数统计结果：\n")
+print("📊 JSON statistic results：\n")
 total = 0
 for path in file_paths:
     count = count_json_lines(path)
-    filename = os.path.relpath(path, base_dir)  # 显示相对路径更简洁
-    print(f"{filename:<30} : {count:>6} 条")
+    filename = os.path.relpath(path, base_dir)
+    print(f"{filename:<30} : {count:>6} item")
     total += count
 
 print("-" * 50)
-print(f"{'总计':<30} : {total:>6} 条")
+print(f"{'sum':<30} : {total:>6} item")

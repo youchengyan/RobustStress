@@ -178,8 +178,6 @@ def experiment(args):
     filenames = args.test_data_path.split(",")
     for filename in filenames:
         logging.info(f"Test in {filename}")
-        # test_data = json.load(open(filename, "r"))
-        # test_data = json.load(open(filename.split(".json")[0] + "_dna_gpt_data.json", "r"))
         test_data = json.load(open(filename, "r"))
 
         random.seed(args.seed)
@@ -192,8 +190,6 @@ def experiment(args):
             label = item["label"]
 
             item["dna_gpt_crit"] = get_dna_gpt(text, args, base_tokenizer, base_model, regen_tokenizer, regen_model)
-
-            # item["dna_gpt_crit"] = get_e_dna_gpt(text, args, item["regen_text"], base_tokenizer, base_model, regen_tokenizer, regen_model)
 
             # result
             if label == 0:
@@ -232,8 +228,8 @@ if __name__ == '__main__':
     parser.add_argument('--test_data_path', type=str, required=True,
                         help="Path to the test data. could be several files with ','. "
                              "Note that the data should have been perturbed.")
-    parser.add_argument('--base_model', default="/data5/storage4/wudauser05/yyc/gptneo", type=str, required=False)
-    parser.add_argument('--regen_model', default="/data5/storage4/wudauser05/yyc/Meta-Llama-3-8B-Instruct", type=str, required=False)
+    parser.add_argument('--base_model', default="gptneo", type=str, required=False)
+    parser.add_argument('--regen_model', default="Meta-Llama-3-8B-Instruct", type=str, required=False)
     parser.add_argument('--DEVICE', default="cuda", type=str, required=False)
     parser.add_argument('--batch_size', default=2, type=int, required=False)
     parser.add_argument('--truncate_ratio', default=0.5, type=float, required=False)

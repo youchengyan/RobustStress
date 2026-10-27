@@ -1,37 +1,20 @@
-# transformers==4.40.0
-# 
-# torch==1.11.0+cu113
-# 
-# torch-geometric==2.5.2
-# 
-# torch-scatter==2.0.9
-# 
-# torch-sparse==0.6.13
-
-# 训练模型
-
 import os
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "true"
-import pickle
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-import numpy as np
-from datetime import datetime
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data
-# from torch.utils.tensorboard import SummaryWriter
-from datetime import datetime
 from tqdm import tqdm
 import time
 import argparse
 import pickle
 import json
 
-# 构建 GCN 模型
+# constructing GCN model
 class GCN2(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
         super(GCN2, self).__init__()
@@ -56,7 +39,6 @@ class GCN2(nn.Module):
 def main():
     parser = argparse.ArgumentParser(description="Load graph data from .pkl files.")
 
-    # 添加命令行参数
     parser.add_argument(
         "--train_path",
         type=str,
@@ -98,11 +80,11 @@ def main():
     torch.cuda.manual_seed_all(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    input_dim = 768  # 输入维度
-    hidden_dim = 512  # 隐藏层维度
-    hidden_dim2 = 256  # 隐藏层维度
-    hidden_dim3 = 128  # 隐藏层维度
-    output_dim = 64  # 输出类别数
+    input_dim = 768
+    hidden_dim = 512
+    hidden_dim2 = 256
+    hidden_dim3 = 128
+    output_dim = 64
     gcnmodel = GCN2(input_dim, hidden_dim2, output_dim).to(device)
     optimizer = optim.Adam(gcnmodel.parameters(), lr=0.0001)
     criterion = nn.BCELoss()
@@ -116,9 +98,8 @@ def main():
     train_acc = []
     val_acc = []
     val_max_acc = -1
-    # start_time = time.time()
     for epoch in range(epochs):
-        # 训练集
+        # training dataset
         gcnmodel.train()
         epoch_loss = 0.0
         correct_predictions = 0
@@ -139,7 +120,7 @@ def main():
         print(f"epoch: {epoch + 1}, train_loss: {epoch_loss}, train_acc: {epoch_acc}")
         train_loss.append(epoch_loss)
         train_acc.append(epoch_acc)
-        #     # 验证集
+        # dev dataset
         gcnmodel.eval()
         epoch_loss = 0.0
         correct_predictions = 0
@@ -169,8 +150,7 @@ def main():
             tag -= 1
             if tag == 0:
                 break
-    # 测试
-
+    # testing
     with open(args.test_file, "rb") as f:
         hc3_test = pickle.load(f)
     test_len = len(hc3_test['y'])
@@ -207,7 +187,6 @@ def main():
     print(f'precision:{precision}, recall:{recall}')
 
     auc = roc_auc_score(hc3_test['y'], test_pres)
-    print(f"roc_auc:{auc}")
 
     result = {
         "roc_auc": auc,
@@ -221,7 +200,6 @@ def main():
     file_name = f"{file_name_without_ext}_PRDetect_result.json"
     output_path = os.path.join(output_dir, file_name)
 
-    # 自动创建目录（exist_ok=True 表示如果已存在也不报错）
     os.makedirs(output_dir, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)

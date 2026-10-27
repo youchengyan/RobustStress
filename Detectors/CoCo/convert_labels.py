@@ -1,7 +1,7 @@
 import json
 import os
 import tempfile
-import shutil  # 👈 新增
+import shutil
 
 
 def convert_labels_inplace(file_path):
@@ -22,19 +22,13 @@ def convert_labels_inplace(file_path):
                     data["label"] = "machine"
                 elif label == 0:
                     data["label"] = "human"
-                # 可选：处理字符串标签
-                # elif str(label) == "1":
-                #     data["label"] = "machine"
-                # elif str(label) == "0":
-                #     data["label"] = "human"
                 else:
-                    pass  # 或 raise error
+                    pass  # or raise error
 
                 temp_file.write(json.dumps(data, ensure_ascii=False) + '\n')
 
         temp_file.close()
 
-        # ✅ 使用 shutil.move() 支持跨设备
         shutil.move(temp_file.name, file_path)
         print(f"Successfully updated labels in: {file_path}")
 
@@ -45,6 +39,7 @@ def convert_labels_inplace(file_path):
         raise e
 
 
+# if you need to convert labels
 if __name__ == "__main__":
     import argparse
 

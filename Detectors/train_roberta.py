@@ -70,13 +70,9 @@ def eval_experiment(args, model_path, test_data_path, optimal_threshold=None):
 
             log_line = f'auroc: {roc_auc:.4f};'
 
-            # # 写入（追加模式）
-            # with open(log_path, 'w', encoding='utf-8') as f:
-            #     f.write(log_line)
-
             parts = filename.split('/')
-            filename = parts[-1]  # 获取文件名 'cross_domains_arxiv_train.json'
-            file_base = filename.split(".json")[0]  # 从文件名中分割出基础部分 'cross_domains_arxiv'
+            filename = parts[-1]
+            file_base = filename.split(".json")[0]
             with open(f"{model_path}/{file_base}.roberta_result_auroc.json", "w") as f:
                 json.dump(log_line, f, indent=4)
 
@@ -86,7 +82,6 @@ def eval_experiment(args, model_path, test_data_path, optimal_threshold=None):
                                                                                           optimal_threshold)
 
             result = {
-                # "roc_auc": roc_auc,
                 "optimal_threshold": optimal_threshold,
                 "conf_matrix": conf_matrix,
                 "precision": precision,
@@ -103,8 +98,8 @@ def eval_experiment(args, model_path, test_data_path, optimal_threshold=None):
             model_name = args.model_name
 
         parts = filename.split('/')
-        filename = parts[-1]  # 获取文件名 'cross_domains_arxiv_train.json'
-        file_base = filename.split(".json")[0]  # 从文件名中分割出基础部分 'cross_domains_arxiv'
+        filename = parts[-1]
+        file_base = filename.split(".json")[0]
 
         logging.info(f"{result}")
         with open(f"{model_path}/{file_base}.roberta_data.json", "w") as f:
@@ -221,7 +216,7 @@ def run(args):
         model = RobertaForSequenceClassification.from_pretrained(args.model_name, num_labels=2)
 
         # Create data loaders
-        train_dataset = JSONDataset(train_data[:2000], tokenizer)
+        train_dataset = JSONDataset(train_data, tokenizer)
         valid_dataset = JSONDataset(valid_data, tokenizer)
 
         result_path = f"{args.train_data_path.split('train')[0]}{args.save_model_path}_{file_name_without_ext}_results"
@@ -288,11 +283,11 @@ def run(args):
         optimal_threshold = eval_experiment(args, model_path, args.test_data_path)
         optimal_threshold = eval_experiment(args, model_path, args.transfer_test_data_path, optimal_threshold)
 
-# python train_roberta.py --train_data_path /data5/storage4/wudauser05/yyc/RobustStressBench/cross_domains_model_specific/model_GLM130B/train.json --test_data_path /data5/storage4/wudauser05/yyc/RobustStressBench/cross_domains_model_specific/model_GLM130B/valid.json --transfer_test_data_path /data5/storage4/wudauser05/yyc/RobustStressBench/cross_domains_model_specific/model_GLM130B/test.json
+# python train_roberta.py --train_data_path RobustStressBench/cross_domains_model_specific/model_GLM130B/train.json --test_data_path RobustStressBench/cross_domains_model_specific/model_GLM130B/valid.json
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name', default="/data5/storage4/wudauser05/yyc/roberta-base", type=str)
+    parser.add_argument('--model_name', default="roberta-base", type=str)
     parser.add_argument('--save_model_path', default="roberta_base_classifier", type=str)
     parser.add_argument('--train_data_path', default="", type=str, required=True)
     parser.add_argument('--test_data_path', type=str, required=True,
