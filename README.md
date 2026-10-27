@@ -120,9 +120,9 @@ python utility/calculate_SBERT.py --input_dir "$CASE_DIR"
 ```bash
 # Low, Medium, and High paraphrases are generated with the prompts reported in the paper.
 # Qwen2.5-7B
-python Detectors/ollama/qwen/qwen_low.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_low.json"
-python Detectors/ollama/qwen/qwen_medium.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_medium.json"
-python Detectors/ollama/qwen/qwen_high.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_high.json"
+python Detectors/ollama/qwen_local/qwen_low.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_low.json"
+python Detectors/ollama/qwen_local/qwen_medium.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_medium.json"
+python Detectors/ollama/qwen_local/qwen_high.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen2.5-7b/test_high.json"
 
 # Llama3-8B
 python Detectors/ollama/llama/llama_low.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/llama3-8b/test_low.json"
@@ -132,9 +132,9 @@ python Detectors/ollama/llama/llama_high.py --input "$CASE_DIR/test.json" --outp
 # Qwen3-14B
 export DASHSCOPE_API_KEY="YOUR_API_KEY"
 
-python Detectors/ollama/ali_qwen/qwen_low.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_low.json"
-python Detectors/ollama/ali_qwen/qwen_medium.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_medium.json"
-python Detectors/ollama/ali_qwen/qwen_high.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_high.json"
+python Detectors/ollama/ali_qwen_api/qwen_low.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_low.json"
+python Detectors/ollama/ali_qwen_api/qwen_medium.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_medium.json"
+python Detectors/ollama/ali_qwen_api/qwen_high.py --input "$CASE_DIR/test.json" --output "$CASE_DIR/polish/qwen3-14b/test_high.json"
 
 # Semantic-Similarity Filtering
 for ATTACKER in qwen2.5-7b llama3-8b qwen3-14b; do
